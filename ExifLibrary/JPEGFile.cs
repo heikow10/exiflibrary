@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace ExifLibrary
@@ -903,6 +904,8 @@ namespace ExifLibrary
 
         private void WriteIFD(MemoryStream stream, Dictionary<ExifTag, ExifProperty> ifd, IFD ifdtype, long tiffoffset, bool preserveMakerNote)
         {
+            ifd = ifd.OrderBy(prop => prop.Value.Tag).ToDictionary(pair => pair.Key, pair => pair.Value);
+
             BitConverterEx conv = new BitConverterEx(BitConverterEx.SystemByteOrder, ByteOrder);
 
             // Create a queue of fields to write
