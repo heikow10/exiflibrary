@@ -987,6 +987,18 @@ namespace ExifLibrary
                 else if (ifdtype == IFD.First && interop.TagID == 0x202)
                     thumbSizeLocation = stream.Position;
 
+                if (data.Length % 2 != 0)
+                {
+                    // add pad byte to avoid odd offsets
+                    byte[] paddedData = new byte[data.Length + 1];
+                    for (int dataIndex = 0; dataIndex < data.Length; dataIndex++)
+                    {
+                        paddedData[dataIndex] = data[dataIndex];
+                    }
+                    paddedData[paddedData.Length - 1] = 0; // pad byte
+                    data = paddedData;
+                }
+
                 // Write 4 byte field value or field data
                 if (data.Length <= 4)
                 {
